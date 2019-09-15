@@ -1,4 +1,4 @@
-// LYRICS to BSB - I WANT IT THAT WAY
+// LYRICS to BSB Songs
 const songList = {
   1: "Yeah,You are my fire,The one desire,Believe when I say,I want it that way,But we are two worlds apart,Can't reach to your heart,When you say,That I want it that way,Tell me why,Ain't nothin' but a heartache,Tell me why,Ain't nothin' but a mistake,Tell me why,I never want to hear you say,I want it that way,Am I your fire?,Your one desire,Yes I know it's too late,But I want it that way,Tell me why,Ain't nothin' but a heartache,Tell me why,Ain't nothin' but a mistake,Tell me why,I never want to hear you say,I want it that way,Now I can see that we've fallen apart,From the way that it used to be, yeah,No matter the distance,I want you to know,That deep down inside of me,You are my fire,The one desire,You are (you are you are you are),Don't want to hear you say,Ain't nothin' but a heartache,Ain't nothin' but a mistake (Don't want to hear you say),I never want to hear you say,I want it that way,Tell me why,Ain't nothin' but a heartache,Tell me why,Ain't nothin' but a mistake,Tell me why,I never want to hear you say,I want it that way,Tell me why,Ain't nothin' but a heartache,Ain't nothin' but a mistake,Tell me why,I never want to hear you say (Never want to hear you say it),I want it that way,Cause I want it that way".split(','),
   2: "Yeah yeah,Baby. please try to forgive me,Stay here don't put out the glow,Hold me now don't bother,If every minute it makes me weaker,You can save me from the man that I've become. oh yeah,Looking back on the things I've done,I was trying to be someone,I played my part. kept you in the dark,Now let me show you the shape of my heart,Sadness is beautiful. loneliness that's tragical,So help me I can't win this war. oh no,Touch me now. don't bother,If every second it makes me weaker,You can save me from the man I've become,Looking back on the things I've done,I was trying to be someone,I played my part. kept you in the dark,Now let me show you the shape of my heart,I'm here with my confession,Got nothing to hide no more,I don't know where to start,But to show you the shape of my heart,I'm lookin' back on things I've done,I never wanna play the same old part,I'll keep you in the dark,Now let me show you the shape of my heart,Looking back on the things I've done,I was trying to be someone,I played my part. kept you in the dark,Now let me show you the shape of my heart,Looking back on the things I've done,I was trying to be someone,I played my part. kept you in the dark,Now let me show you the shape of,Show you the shape of my heart".split(',')
@@ -52,6 +52,15 @@ const lyricChangeReducer = (state = initialState.songsById, action) => {
       return state;
   }
 };
+
+const songChangeReducer = (state = initialState.songsById, action) => {
+    switch (action.type) {
+      case 'CHANGE_SONG':
+        return action.newSelectedSongId;
+      default:
+        return state;
+    }
+  };
 
 // JEST TESTS + SETUP WILL GO HERE
 const { expect } = window;
