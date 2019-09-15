@@ -15,7 +15,7 @@ const initialState = {
       songArray: songList[1],
       arrayPosition: 0,
     },
-    1: {
+    2: {
       title: 'Shape of My Heart',
       album: 'Black & Blue',
       songId: 2,
@@ -25,58 +25,30 @@ const initialState = {
   },
 };
 
-// REDUCER WILL GO HERE
-
+// REDUX REDUCER
 const lyricChangeReducer = (state = initialState.songsById, action) => {
-
-  // Declares several variables used below, without yet defining.
   let newArrayPosition;
-  let newSongByIdEntry;
+  let newSongsByIdEntry;
   let newSongsByIdStateSlice;
   switch (action.type) {
     case 'NEXT_LYRIC':
-
-      // Locates the arrayPosition of the song whose ID was provided
-      // in the action's payload, and increments it by one:
       newArrayPosition = state[action.currentSongId].arrayPosition + 1;
-
-      // Creates a copy of that song's entry in the songsById state slice,
-      // and adds the updated newArrayPosition value we just calculated as its arrayPosition:
       newSongsByIdEntry = Object.assign({}, state[action.currentSongId], {
         arrayPosition: newArrayPosition,
       });
-
-      // Creates a copy of the entire songsById state slice, and adds the
-      // updated newSongsById state entry we just created to this new copy:
       newSongsByIdStateSlice = Object.assign({}, state, {
-        [action.currentSongId]: newSongsByEntry,
-      });
-
-      // Returns the entire newSongsByIdStateSlice we just constructed, which will
-      // update state in our Redux store to match this returned value:
-      return newSongsByIdStateSlice;
-
-    case 'RESTART_SONG':
-
-      // Creates a copy of the song entry in songsById state slice whose ID matches
-      // the currentSongId included with the action, sets the copy's arrayPosition value
-      // to 0:
-      newSongsbyIdEntry = Object.assign({}, state[action.currentSongId], {
-        arrayPosition: 0,
-      });
-
-      // Creates a copy of the entire songsById state slice, and adds the
-      // updated newSongsByIdEntry we just created to this copy:
-      newSongsByIdStateSlice = Object.assign({}, state[action.currentSongId], {
         [action.currentSongId]: newSongsByIdEntry,
       });
-
-      // Returns the entire newSongsByIdStateSlice we just constructed, which will
-      // update the songsById state slice in our Redux store to match the new slice returned:
+      return newSongsByIdStateSlice;
+    case 'RESTART_SONG':
+      newSongsByIdEntry = Object.assign({}, state[action.currentSongId], {
+        arrayPosition: 0,
+      });
+      newSongsByIdStateSlice = Object.assign({}, state, {
+        [action.currentSongId]: newSongsByIdEntry,
+      });
       return newSongsByIdStateSlice;
     default:
-
-      // If action is neither 'NEXT_LYRIC' nor 'RESTART_STATE' type, return existing state:
       return state;
   }
 };
@@ -88,37 +60,42 @@ expect(lyricChangeReducer(initialState.songsById, { type: null })).toEqual(initi
 
 expect(lyricChangeReducer(initialState.songsById, { type: 'NEXT_LYRIC', currentSongId: 2 })).toEqual({
   1: {
-    title: "Bye Bye Bye",
+    title: 'I Want it That Way',
     album: 'Millennium',
     songId: 1,
     songArray: songList[1],
     arrayPosition: 0,
   },
   2: {
-    title: "What's Goin' On",
-      album: 'Black & Blue',
+    title: 'Shape of My Heart',
+    album: 'Black & Blue',
     songId: 2,
     songArray: songList[2],
-    arrayPosition: 0,
-  }
+    arrayPosition: 1,
+  },
 });
-//
+
 expect(lyricChangeReducer(initialState.songsById, { type: 'RESTART_SONG', currentSongId: 1 })).toEqual({
   1: {
-    title: "Bye Bye Bye",
+    title: 'I Want it That Way',
     album: 'Millennium',
     songId: 1,
     songArray: songList[1],
     arrayPosition: 0,
   },
   2: {
-    title: "What's Goin' On",
+    title: 'Shape of My Heart',
     album: 'Black & Blue',
     songId: 2,
     songArray: songList[2],
     arrayPosition: 0,
-  }
+  },
 });
+
+expect(songChangeReducer(initialState, { type: null })).toEqual(initialState);
+
+expect(songChangeReducer(initialState.currentSongId, { type: 'CHANGE_SONG', newSelectedSongId: 1 })).toEqual(1);
+
 // REDUX STORE
 const { createStore } = Redux;
 const store = createStore(lyricChangeReducer);
