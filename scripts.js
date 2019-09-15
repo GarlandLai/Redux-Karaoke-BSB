@@ -6,24 +6,46 @@ const songList = {
 
 // INITIAL REDUX STATE
 const initialState = {
-  songLyricsArray: songLyricsArray,
-  arrayPosition: 0,
+  currentSongId: null,
+  songsById: {
+    1: {
+      title: 'I Want it That Way',
+      album: 'Millennium',
+      songId: 1,
+      songArray: songList[1],
+      arrayPosition: 0,
+    },
+    1: {
+      title: 'Shape of My Heart',
+      album: 'Black & Blue',
+      songId: 2,
+      songArray: songList[2],
+      arrayPosition: 0,
+    },
+  },
 };
 
 // REDUCER WILL GO HERE
-let newState;
-const reducer = (state = initialState, action) => {
+const lyricChangeReducer = (state = initialState.songsById, action) => {
+  let newArrayPosition;
+  let newSongByIdEntry;
+  let newSongsByIdStateSlice;
   switch (action.type) {
     case 'NEXT_LYRIC':
-      let newArrayPosition = state.arrayPosition + 1;
-      newState = {
-        songLyricsArray: state.songLyricsArray,
-        arrayPosition: newArrayPosition,
-      };
-      return newState;
+      newArrayPosition = state[action.currentSongId].arrayPosition + 1;
+      newSongsByIdStateSlice = Object.assign({}, state, {
+        [action.currentSongId]: newSongsByEntry,
+      });
+      return newSongsByIdStateSlice;
+
     case 'RESTART_SONG':
-      newState = initialState;
-      return newState;
+      newSongsbyIdEntry = Object.assign({}, state[action.currentSongId], {
+        arrayPosition: 0,
+      });
+      newSongsByIdStateSlice = Object.assign({}, state[action.currentSongId], {
+        [action.currentSongId]: newSongsByIdEntry,
+      });
+      return newSongsByIdStateSlice;
     default:
       return state;
   }
@@ -32,23 +54,47 @@ const reducer = (state = initialState, action) => {
 // JEST TESTS + SETUP WILL GO HERE
 const { expect } = window;
 
-expect(reducer(initialState, { type: null })).toEqual(initialState);
+expect(lyricChangeReducer(initialState.songsById, { type: null })).toEqual(initialState.songsById);
 
-expect(reducer(initialState, { type: 'NEXT_LYRIC' })).toEqual({
-  songLyricsArray: songLyricsArray,
-  arrayPosition: 1,
+expect(lyricChangeReducer(initialState.songsById, { type: 'NEXT_LYRIC', currentSongId: 2 })).toEqual({
+  songsById: {
+    1: {
+      title: 'I Want it That Way',
+      album: 'Millennium',
+      songId: 1,
+      songArray: songList[1],
+      arrayPosition: 0,
+    },
+    1: {
+      title: 'Shape of My Heart',
+      album: 'Black & Blue',
+      songId: 2,
+      songArray: songList[2],
+      arrayPosition: 0,
+    },
+  },
 });
 
-expect(reducer({
-  songLyricsArray: songLyricsArray,
-  arrayPosition: 1,
-},
-  { type: 'RESTART_SONG' })
-).toEqual(initialState);
+expect(lyricChangeReducer(initialState.songsById, { type: 'RESTART_SONG', currentSongId: 1 })).toEqual({
+    1: {
+      title: 'I Want it That Way',
+      album: 'Millennium',
+      songId: 1,
+      songArray: songList[1],
+      arrayPosition: 0,
+    },
+    1: {
+      title: 'Shape of My Heart',
+      album: 'Black & Blue',
+      songId: 2,
+      songArray: songList[2],
+      arrayPosition: 0,
+    },
+  });
 
 // REDUX STORE
 const { createStore } = Redux;
-const store = createStore(reducer);
+const store = createStore(lyricChangeReducer);
 
 // console.log(store.getState());
 
